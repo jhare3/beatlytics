@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beatlytics</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="bg-primary text-white text-center py-4">
+    <h1>Beatlytics</h1>
+    <p>Your ultimate toolkit for YouTube Type Beat producers.</p>
+  </header>
+
+  <main class="container my-5">
+    <div class="row">
+
+    <!-- Keyword Research Tool -->
+    <section class="col-md-6">
+        <div class="bg-white p-4 rounded shadow">
+        <h2>Keyword Research</h2>
+        <div class="input-group mb-3"> <!-- Input group -->
+            <input type="text" id="keyword-input" class="form-control" placeholder="Enter a keyword...">
+            <button id="search-button" class="btn btn-primary">Search</button>
+        </div>
+        <ul id="results" class="list-unstyled"></ul>
+        <h2>SEO Tips</h2>
+        <div id="seo-content">
+            <p>Enter a keyword above to get SEO tips!</p>
+        </div>
+        </div>
+    </section>
+
+      <!-- Recommended Keywords Section -->
+      <section class="col-md-6">
+        <div class="bg-white p-4 rounded shadow">
+          <h2>Your Top Keywords</h2>
+          <p>Here are some popular keywords for your channel:</p>
+          <ul id="keyword-list" class="list-unstyled"></ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="bg-dark text-white text-center py-3">
+    <p>&copy; 2025 Beatlytics</p>
+  </footer>
+
+  <!-- Bootstrap JS (Optional, for interactive components) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
