@@ -11,9 +11,9 @@ let keywordChart;
 
 // Mock Data for Search Results
 function generateMockResults(query) {
-  const types = ["Type Beat", "Type Beat 2025", "Type Beat Free", "Freestyle Type Beat", "Lo-fi Type Beat"];
+  const types = ["Type Beat", "Type Beat 2025", "Type Beat Free", "Freestyle Type Beat"];
   return types.map(type => {
-    const keyword = `${query} ${type} 2025`;
+    const keyword = `${query} ${type}`;
     const score = Math.floor(Math.random() * 100) + 1; // Random score between 1 and 100
     return { keyword, score };
   });
@@ -62,9 +62,9 @@ function displayResults(results) {
 function displaySEOTips(query) {
   seoContent.innerHTML = `
     <h3>SEO Tips for Your Video</h3>
-    <p><strong>Title:</strong> Free ${query} Type Beat 2025</p>
-    <p><strong>Description:</strong> Use the keyword naturally in the first two lines of your description.</p>
-    <p><strong>Tags:</strong> Add relevant tags like '${query}', 'Type Beat', and '2025'.</p>
+    <p><strong>Title:</strong> [Free] ${query} Type Beat 2025</p>
+    <p><strong>Description:</strong> Use the keyword in the first two lines of your description.</p>
+    <p><strong>Tags:</strong> Add only relevant tags like '${query}', 'Type Beat', and '2025'.</p>
   `;
 }
 
@@ -98,7 +98,7 @@ function updateChart(keywords) {
   const borderColors = ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(153, 102, 255, 1)'];
 
   const datasets = keywords.map((keyword, index) => ({
-    label: `Search Volume for "${keyword}"`,
+    label: `Search Volume for "${keyword}" Type Beat`,
     data: labels.map(() => Math.floor(Math.random() * 100) + 1), // Mock data
     backgroundColor: colors[index],
     borderColor: borderColors[index],
