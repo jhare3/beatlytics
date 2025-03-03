@@ -77,6 +77,10 @@ body {
   .bg-yellow {
     background-color: #ffc107 !important; /* Bootstrap yellow */
   }
+
+  .bg-orange {
+    background-color: #dd9700 !important; /* Bootstrap yellow */
+  }
   
   .bg-red {
     background-color: #dc3545 !important; /* Bootstrap red */

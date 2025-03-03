@@ -9,22 +9,9 @@ const keywordChartCanvas = document.getElementById('keywordChart').getContext('2
 // Initialize Chart
 let keywordChart;
 
-// Event Listeners
-searchButton.addEventListener('click', () => {
-  const query = keywordInput.value.trim();
-  if (query) {
-    const mockResults = generateMockResults(query); // Generate results based on the query
-    displayResults(mockResults);
-    displaySEOTips(query);
-    updateChart(query);
-  } else {
-    alert('Please enter a keyword!');
-  }
-});
-
-// Generate Mock Results
+// Mock Data for Search Results
 function generateMockResults(query) {
-  const types = ["Type Beat", "Chill Beat", "Sad Beat", "Freestyle Beat", "Lo-fi Beat"];
+  const types = ["Type Beat", "Type Beat 2025", "Type Beat Free", "Freestyle Type Beat", "Lo-fi Type Beat"];
   return types.map(type => {
     const keyword = `${query} ${type} 2025`;
     const score = Math.floor(Math.random() * 100) + 1; // Random score between 1 and 100
@@ -32,7 +19,31 @@ function generateMockResults(query) {
   });
 }
 
-// Display Results
+// Mock Data for Top Keywords
+const topKeywords = [
+  { keyword: "Mac Miller Type Beat", score: 95 },
+  { keyword: "Earl Sweatshirt Type Beat", score: 70 },
+  { keyword: "Faces Type Beat", score: 45 },
+  { keyword: "Chill Type Beat", score: 20 },
+];
+
+// Event Listeners
+searchButton.addEventListener('click', () => {
+  const query = keywordInput.value.trim();
+  if (query) {
+    const mockResults = generateMockResults(query); // Generate results based on the query
+    displayResults(mockResults);
+    displaySEOTips(query);
+
+    // Compare search volume for 3 keywords
+    const keywordsToCompare = [query, "Drake", "Kendrick Lamar"]; // Example keywords
+    updateChart(keywordsToCompare);
+  } else {
+    alert('Please enter a keyword!');
+  }
+});
+
+// Display Search Results
 function displayResults(results) {
   resultsList.innerHTML = results
     .map(item => {
@@ -51,7 +62,7 @@ function displayResults(results) {
 function displaySEOTips(query) {
   seoContent.innerHTML = `
     <h3>SEO Tips for Your Video</h3>
-    <p><strong>Title:</strong> Include the keyword in your video title.</p>
+    <p><strong>Title:</strong> Free ${query} Type Beat 2025</p>
     <p><strong>Description:</strong> Use the keyword naturally in the first two lines of your description.</p>
     <p><strong>Tags:</strong> Add relevant tags like '${query}', 'Type Beat', and '2025'.</p>
   `;
@@ -59,15 +70,15 @@ function displaySEOTips(query) {
 
 // Determine color of score
 function getScoreColor(score) {
-  if (score >= 71) return "green";
-  if (score >= 31) return "yellow";
+  if (score >= 75) return "green";
+  if (score >= 50) return "yellow";
+  if (score >= 25) return "orange";
   return "red";
 }
 
-// Display Recommended Keywords
-function displayRecommendedKeywords() {
-  const mockResults = generateMockResults("Default"); // Default keyword for initial load
-  keywordList.innerHTML = mockResults
+// Display Top Keywords
+function displayTopKeywords() {
+  keywordList.innerHTML = topKeywords
     .map(item => {
       const color = getScoreColor(item.score);
       return `
@@ -80,18 +91,23 @@ function displayRecommendedKeywords() {
     .join('');
 }
 
-// Update Chart
-function updateChart(query) {
+// Update Chart to Compare Multiple Keywords
+function updateChart(keywords) {
   const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+  const colors = ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(153, 102, 255, 0.2)'];
+  const borderColors = ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(153, 102, 255, 1)'];
+
+  const datasets = keywords.map((keyword, index) => ({
+    label: `Search Volume for "${keyword}"`,
+    data: labels.map(() => Math.floor(Math.random() * 100) + 1), // Mock data
+    backgroundColor: colors[index],
+    borderColor: borderColors[index],
+    borderWidth: 1
+  }));
+
   const data = {
     labels: labels,
-    datasets: [{
-      label: `Search Volume for "${query}"`,
-      data: [65, 59, 80, 81, 56, 55, 40], // Mock data
-      backgroundColor: 'rgba(75, 192, 192, 0.2)',
-      borderColor: 'rgba(75, 192, 192, 1)',
-      borderWidth: 1
-    }]
+    datasets: datasets
   };
 
   const config = {
@@ -136,5 +152,5 @@ function updateChart(query) {
   keywordChart = new Chart(keywordChartCanvas, config);
 }
 
-// Call the Function to Display Keywords on Page Load
-displayRecommendedKeywords();
+// Call the Function to Display Top Keywords on Page Load
+displayTopKeywords();
