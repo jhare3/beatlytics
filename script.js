@@ -3,95 +3,138 @@ const keywordInput = document.getElementById('keyword-input');
 const searchButton = document.getElementById('search-button');
 const resultsList = document.getElementById('results');
 const seoContent = document.getElementById('seo-content');
+const keywordList = document.getElementById('keyword-list');
+const keywordChartCanvas = document.getElementById('keywordChart').getContext('2d');
 
-// Mock Data
-const mockResults = [
-    { keyword: "Drake Type Beat 2025", score: 85 },
-    { keyword: "Trap Type Beat 2025", score: 65 },
-    { keyword: "Sad Type Beat 2025", score: 45 },
-    { keyword: "R&B Type Beat 2025", score: 90 },
-    { keyword: "Chill Type Beat 2025", score: 75 },
-    { keyword: "Hard Type Beat 2025", score: 30 },
-    { keyword: "Freestyle Type Beat 2025", score: 50 },
-    { keyword: "Pop Type Beat 2025", score: 80 },
-    { keyword: "Lo-fi Type Beat 2025", score: 95 },
-    { keyword: "Dark Type Beat 2025", score: 25 }
-];
-
-const mockSEOTips = {
-  title: "Include the keyword in your video title.",
-  description: "Use the keyword naturally in the first two lines of your description.",
-  tags: "Add relevant tags like 'Type Beat', 'Drake', and '2023'."
-};
+// Initialize Chart
+let keywordChart;
 
 // Event Listeners
 searchButton.addEventListener('click', () => {
   const query = keywordInput.value.trim();
   if (query) {
-    displayResults(query);
-    displaySEOTips();
+    const mockResults = generateMockResults(query); // Generate results based on the query
+    displayResults(mockResults);
+    displaySEOTips(query);
+    updateChart(query);
   } else {
-    alert("Please enter a keyword!");
+    alert('Please enter a keyword!');
   }
 });
 
-// Display Mock Results
-function displayResults(query) {
-  resultsList.innerHTML = mockResults
+// Generate Mock Results
+function generateMockResults(query) {
+  const types = ["Type Beat", "Chill Beat", "Sad Beat", "Freestyle Beat", "Lo-fi Beat"];
+  return types.map(type => {
+    const keyword = `${query} ${type} 2025`;
+    const score = Math.floor(Math.random() * 100) + 1; // Random score between 1 and 100
+    return { keyword, score };
+  });
+}
+
+// Display Results
+function displayResults(results) {
+  resultsList.innerHTML = results
     .map(item => {
-        const color = getScoreColor(item.score);
-        return `
-          <li class="d-flex justify-content-between align-items-center">
-            <span>${item.keyword}</span>
-            <span class="badge bg-${color}">${item.score}</span>
-          </li>
-        `;
-      })
+      const color = getScoreColor(item.score);
+      return `
+        <li class="d-flex justify-content-between align-items-center">
+          <span>${item.keyword}</span>
+          <span class="badge bg-${color}">${item.score}</span>
+        </li>
+      `;
+    })
     .join('');
 }
 
 // Display SEO Tips
-function displaySEOTips() {
+function displaySEOTips(query) {
   seoContent.innerHTML = `
     <h3>SEO Tips for Your Video</h3>
-    <p><strong>Title:</strong> ${mockSEOTips.title}</p>
-    <p><strong>Description:</strong> ${mockSEOTips.description}</p>
-    <p><strong>Tags:</strong> ${mockSEOTips.tags}</p>
+    <p><strong>Title:</strong> Include the keyword in your video title.</p>
+    <p><strong>Description:</strong> Use the keyword naturally in the first two lines of your description.</p>
+    <p><strong>Tags:</strong> Add relevant tags like '${query}', 'Type Beat', and '2025'.</p>
   `;
 }
 
-// Mock Data for Recommended Keywords
-const recommendedKeywords = [
-    { keyword: "Drake Type Beat 2025", score: 85 },
-    { keyword: "Trap Type Beat 2025", score: 65 },
-    { keyword: "Sad Type Beat 2025", score: 45 },
-    { keyword: "R&B Type Beat 2025", score: 90 },
-  ];
+// Determine color of score
+function getScoreColor(score) {
+  if (score >= 71) return "green";
+  if (score >= 31) return "yellow";
+  return "red";
+}
 
-  //determine color of score
-  function getScoreColor(score) {
-    if (score >= 71) return "green";
-    if (score >= 31) return "yellow";
-    return "red";
+// Display Recommended Keywords
+function displayRecommendedKeywords() {
+  const mockResults = generateMockResults("Default"); // Default keyword for initial load
+  keywordList.innerHTML = mockResults
+    .map(item => {
+      const color = getScoreColor(item.score);
+      return `
+        <li class="d-flex justify-content-between align-items-center">
+          <span>${item.keyword}</span>
+          <span class="badge bg-${color}">${item.score}</span>
+        </li>
+      `;
+    })
+    .join('');
+}
+
+// Update Chart
+function updateChart(query) {
+  const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+  const data = {
+    labels: labels,
+    datasets: [{
+      label: `Search Volume for "${query}"`,
+      data: [65, 59, 80, 81, 56, 55, 40], // Mock data
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 1
+    }]
+  };
+
+  const config = {
+    type: 'line', // Use 'line', 'bar', or 'pie'
+    data: data,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Search Volume'
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: 'Month'
+          }
+        }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: (context) => {
+              const label = context.dataset.label || '';
+              const value = context.raw || 0;
+              return `${label}: ${value}`;
+            }
+          }
+        }
+      }
+    }
+  };
+
+  // Destroy existing chart if it exists
+  if (keywordChart) {
+    keywordChart.destroy();
   }
-  
-  // DOM Element for Keyword List
-  const keywordList = document.getElementById('keyword-list');
-  
-  // Function to Display Recommended Keywords
-  function displayRecommendedKeywords() {
-    keywordList.innerHTML = recommendedKeywords
-      .map(item => {
-        const color = getScoreColor(item.score);
-        return `
-          <li class="d-flex justify-content-between align-items-center">
-            <span>${item.keyword}</span>
-            <span class="badge bg-${color}">${item.score}</span>
-          </li>
-        `;
-      })
-      .join('');
-  }
-  
-  // Call the Function to Display Keywords on Page Load
-  displayRecommendedKeywords();
+
+  // Create new chart
+  keywordChart = new Chart(keywordChartCanvas, config);
+}
+
+// Call the Function to Display Keywords on Page Load
+displayRecommendedKeywords();
